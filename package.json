@@ -1,0 +1,17 @@
+{
+  "name": "com.aoyon.overall-ndmf-mesh-simplifier",
+  "displayName": "Overall NDMF Mesh Simplifier",
+  "version": "0.1.0",
+  "unity": "2022.3",
+  "description": "Simplify meshes in bulk and non-destructively for Unity.",
+  "author": {
+    "name": "Ao_425",
+    "url": "https://github.com/Tliks"
+  },
+  "url": "https://github.com/Tliks/OverallNDMFMeshSimplifier",
+  "changelogUrl": "https://github.com/Tliks/OverallNDMFMeshSimplifier/blob/main/CHANGELOG.md",
+  "vpmDependencies": {
+    "nadena.dev.ndmf": ">=1.5.0",
+    "com.ramtype0.meshia.mesh-simplification": ">=2.1.0"
+  }
+}

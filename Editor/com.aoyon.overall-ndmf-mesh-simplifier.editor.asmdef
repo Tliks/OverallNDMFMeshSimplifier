@@ -1,0 +1,20 @@
+{
+    "name": "com.aoyon.overall-ndmf-mesh-simplifier.editor",
+    "rootNamespace": "",
+    "references": [
+        "nadena.dev.ndmf",
+        "Meshia.MeshSimplification.Runtime",
+        "com.aoyon.overall-ndmf-mesh-simplifier.runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
