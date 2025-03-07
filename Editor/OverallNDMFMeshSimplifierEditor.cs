@@ -240,6 +240,8 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
             for (int i = 0; i < _simplifierTargets.arraySize; i++)
             {
                 var simplifierTarget = _simplifierTargets.GetArrayElementAtIndex(i);
+                var renderer = simplifierTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.Renderer));
+                if (renderer.objectReferenceValue == null) continue;
                 var state = simplifierTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.State));
 
                 switch (state.intValue)
