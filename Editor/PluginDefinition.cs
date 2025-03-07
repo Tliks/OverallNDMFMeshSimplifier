@@ -1,10 +1,10 @@
 using UnityEngine;
 using nadena.dev.ndmf;
-using com.aoyon.OverallNDMFMeshSimplifiers;
+using com.aoyon.OverallNDMFMeshSimplifier;
 
 [assembly: ExportsPlugin(typeof(PluginDefinition))]
 
-namespace com.aoyon.OverallNDMFMeshSimplifiers
+namespace com.aoyon.OverallNDMFMeshSimplifier
 {
     public class PluginDefinition : Plugin<PluginDefinition>
     {

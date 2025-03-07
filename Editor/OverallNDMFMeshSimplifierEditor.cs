@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using nadena.dev.ndmf.preview;
 
-namespace com.aoyon.OverallNDMFMeshSimplifiers
+namespace com.aoyon.OverallNDMFMeshSimplifier
 {
     [CustomEditor(typeof(OverallNdmfMeshSimplifier))]
     internal class OverallNDMFMeshSimplifierEditor : Editor
@@ -37,7 +37,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
             Undo.RecordObject(_component, "AssginTarget");
             foreach (var newRenderer in newRenderers)
             {
-                if (!OverallNdmfMeshSimplifierTarget.TryGet(newRenderer, out var target)) continue;
+                if (!OverallNDMFMeshSimplifierTarget.TryGet(newRenderer, out var target)) continue;
 
                 if (Utils.IsEditorOnlyInHierarchy(newRenderer.gameObject)) target.State = OverallNdmfMeshSimplifierTargetState.EditorOnly;
 
@@ -111,9 +111,9 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
 
             using (new EditorGUILayout.HorizontalScope())
             {
-                var current = enabledTargets.Sum(t => t.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.AbsoulteTriangleCount)).intValue)
-                    + disabledTargets.Sum(t => t.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.TotalTriangleCount)).intValue);
-                var sum = enabledTargets.Concat(disabledTargets).Sum(t => t.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.TotalTriangleCount)).intValue);
+                var current = enabledTargets.Sum(t => t.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.AbsoulteTriangleCount)).intValue)
+                    + disabledTargets.Sum(t => t.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount)).intValue);
+                var sum = enabledTargets.Concat(disabledTargets).Sum(t => t.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount)).intValue);
                 var countLabel = $"Current: {current} / {sum}";
                 var labelWidth1 = 7f * countLabel.ToString().Count();
                 var isOverflow = _targetTriangleCount.intValue < current;
@@ -133,11 +133,11 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
             for (int i = 0; i < enabledTargets.Count; i++)
             {
                 var enabledTarget = enabledTargets[i];
-                var state = enabledTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.State));
-                var renderer = enabledTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.Renderer));
-                var absoulteValue = enabledTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.AbsoulteTriangleCount));
-                var totalTriangleCount = enabledTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.TotalTriangleCount));
-                var fixedValue = enabledTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.Fixed));
+                var state = enabledTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.State));
+                var renderer = enabledTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.Renderer));
+                var absoulteValue = enabledTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.AbsoulteTriangleCount));
+                var totalTriangleCount = enabledTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount));
+                var fixedValue = enabledTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.Fixed));
 
                 using (new EditorGUILayout.HorizontalScope())
                 {
@@ -161,7 +161,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
 
             bool warnEditorOnly = editorOnlyTargets.Any(editorOnlyTarget =>
             {
-                var renderer = editorOnlyTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.Renderer));
+                var renderer = editorOnlyTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.Renderer));
                 return !Utils.IsEditorOnlyInHierarchy((renderer.objectReferenceValue as Renderer).gameObject);
             });
             using (new EditorGUILayout.HorizontalScope())
@@ -180,9 +180,9 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
                 var otherTargets = disabledTargets.Concat(editorOnlyTargets);
                 foreach (var otherTarget in otherTargets)
                 {
-                    var state = otherTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.State));
-                    var renderer = otherTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.Renderer));
-                    var totalTriangleCount = otherTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.TotalTriangleCount));
+                    var state = otherTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.State));
+                    var renderer = otherTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.Renderer));
+                    var totalTriangleCount = otherTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount));
 
                     var IsEditorOnly = state.intValue == (int)OverallNdmfMeshSimplifierTargetState.EditorOnly;
                     var suspicious = IsEditorOnly && !Utils.IsEditorOnlyInHierarchy((renderer.objectReferenceValue as Renderer).gameObject);
@@ -210,8 +210,8 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
 
             if (_currentSimplifySettingTarget != null)
             {
-                var renderer = _currentSimplifySettingTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.Renderer));
-                var options = _currentSimplifySettingTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.Options));
+                var renderer = _currentSimplifySettingTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.Renderer));
+                var options = _currentSimplifySettingTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.Options));
                 
                 _showCurrentSimplifySetting = EditorGUILayout.Foldout(_showCurrentSimplifySetting, $"Simplify Options for {renderer?.objectReferenceValue?.name}");
                 if (_showCurrentSimplifySetting)
@@ -225,7 +225,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
                 }
             }
 
-            static float Width(SerializedProperty prop) => 7f * prop.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.TotalTriangleCount)).intValue.ToString().Count();
+            static float Width(SerializedProperty prop) => 7f * prop.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount)).intValue.ToString().Count();
         }
 
         private void TogglePreviewGUI(TogglablePreviewNode toggleNode)
@@ -254,7 +254,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
             for (int i = 0; i < _simplifierTargets.arraySize; i++)
             {
                 var simplifierTarget = _simplifierTargets.GetArrayElementAtIndex(i);
-                var state = simplifierTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.State));
+                var state = simplifierTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.State));
 
                 switch (state.intValue)
                 {
@@ -276,8 +276,8 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
         {
             targets.Sort((a, b) =>
             {
-                var aTotalTriangleCount = a.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.TotalTriangleCount)).intValue;
-                var bTotalTriangleCount = b.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.TotalTriangleCount)).intValue;
+                var aTotalTriangleCount = a.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount)).intValue;
+                var bTotalTriangleCount = b.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount)).intValue;
                 return bTotalTriangleCount - aTotalTriangleCount;
             });
         }
@@ -293,12 +293,12 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
             var unadjustablecount = 0;
             foreach (var enabledTarget in enabledTargets)
             {
-                var fixedValue = enabledTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.Fixed)).boolValue;
+                var fixedValue = enabledTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.Fixed)).boolValue;
 
                 if (!fixedValue && !SerializedProperty.DataEquals(fixedProperty, enabledTarget)) adjustableTargets.Add(enabledTarget);
-                else unadjustablecount += enabledTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.AbsoulteTriangleCount)).intValue; // 固定された対象はAbsoulteTriangleCount
+                else unadjustablecount += enabledTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.AbsoulteTriangleCount)).intValue; // 固定された対象はAbsoulteTriangleCount
             }
-            unadjustablecount += disabledTargets.Sum(t => t.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.TotalTriangleCount)).intValue); // TotalTriangleCount
+            unadjustablecount += disabledTargets.Sum(t => t.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount)).intValue); // TotalTriangleCount
 
             int actualTargetCount = _targetTriangleCount.intValue - unadjustablecount;
             if (actualTargetCount <= 0) 
@@ -307,12 +307,12 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
                 return;
             }
 
-            var adjustableRatio = (float)actualTargetCount / adjustableTargets.Sum(t => t.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.AbsoulteTriangleCount)).intValue);
+            var adjustableRatio = (float)actualTargetCount / adjustableTargets.Sum(t => t.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.AbsoulteTriangleCount)).intValue);
 
             foreach (var adjustableTarget in adjustableTargets)
             {
-                var absoulteValue = adjustableTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.AbsoulteTriangleCount));
-                var totalTriangleCount = adjustableTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.TotalTriangleCount));
+                var absoulteValue = adjustableTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.AbsoulteTriangleCount));
+                var totalTriangleCount = adjustableTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount));
                 absoulteValue.intValue = (int)(absoulteValue.intValue * adjustableRatio);
                 if (absoulteValue.intValue > totalTriangleCount.intValue)
                 {
@@ -320,14 +320,14 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
                 }
             }
             
-            var overflow = adjustableTargets.Sum(t => t.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.AbsoulteTriangleCount)).intValue) - actualTargetCount;
+            var overflow = adjustableTargets.Sum(t => t.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.AbsoulteTriangleCount)).intValue) - actualTargetCount;
 
             while (overflow > 0 && adjustableTargets.Any())
             {
                 foreach (var adjustableTarget in adjustableTargets)
                 {
-                    var absoulteValue = adjustableTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.AbsoulteTriangleCount));
-                    var totalTriangleCount = adjustableTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.TotalTriangleCount));
+                    var absoulteValue = adjustableTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.AbsoulteTriangleCount));
+                    var totalTriangleCount = adjustableTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount));
 
                     if (absoulteValue.intValue < totalTriangleCount.intValue)
                     {
@@ -346,10 +346,10 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
             for (int i = 0; i < _simplifierTargets.arraySize; i++)
             {
                 var simplifierTarget = _simplifierTargets.GetArrayElementAtIndex(i);
-                var state = simplifierTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.State));
-                var fixedValue = simplifierTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.Fixed));
-                var absoulteValue = simplifierTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.AbsoulteTriangleCount));
-                var totalTriangleCount = simplifierTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.TotalTriangleCount));
+                var state = simplifierTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.State));
+                var fixedValue = simplifierTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.Fixed));
+                var absoulteValue = simplifierTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.AbsoulteTriangleCount));
+                var totalTriangleCount = simplifierTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount));
 
                 if (state.intValue == (int)OverallNdmfMeshSimplifierTargetState.Enabled && !fixedValue.boolValue)
                 {

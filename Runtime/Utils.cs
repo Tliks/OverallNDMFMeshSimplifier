@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace com.aoyon.OverallNDMFMeshSimplifiers
+namespace com.aoyon.OverallNDMFMeshSimplifier
 {
     public class Utils
     {

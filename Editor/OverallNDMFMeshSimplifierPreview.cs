@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using nadena.dev.ndmf.preview;
 
-namespace com.aoyon.OverallNDMFMeshSimplifiers
+namespace com.aoyon.OverallNDMFMeshSimplifier
 {
     internal class OverallNDMFMeshSimplifierPreview : IRenderFilter
     {
@@ -64,16 +64,16 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
             context.InvokeOnInvalidate(cts, cts => cts.Cancel());
             var simplifiedMesh = await target.ProcessAsync();
 
-            return new OverallNdmfMeshSimplifierPreviewNode(simplifiedMesh);
+            return new OverallNDMFMeshSimplifierPreviewNode(simplifiedMesh);
         }
     }
 
-    internal class OverallNdmfMeshSimplifierPreviewNode : IRenderFilterNode
+    internal class OverallNDMFMeshSimplifierPreviewNode : IRenderFilterNode
     {
         public RenderAspects WhatChanged => RenderAspects.Mesh;
         private Mesh _modifiedMesh; 
 
-        public OverallNdmfMeshSimplifierPreviewNode(Mesh modifiedMesh)
+        public OverallNDMFMeshSimplifierPreviewNode(Mesh modifiedMesh)
         {
             _modifiedMesh = modifiedMesh;
         }

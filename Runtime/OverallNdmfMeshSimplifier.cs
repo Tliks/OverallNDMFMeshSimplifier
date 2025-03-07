@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Meshia.MeshSimplification;
 
-namespace com.aoyon.OverallNDMFMeshSimplifiers
+namespace com.aoyon.OverallNDMFMeshSimplifier
 {
     [DisallowMultipleComponent]
-    [AddComponentMenu("OverallNDMFMeshSimplifier/OverallNDMFMeshSimplifier")]
+    [AddComponentMenu("Overall NDMF Mesh Simplifier/Overall NDMF Mesh Simplifier")]
     public class OverallNdmfMeshSimplifier : MonoBehaviour
 #if CONTAINS_VRCHAT_BASE
     , VRC.SDKBase.IEditorOnly
@@ -16,11 +16,11 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
     {
         public bool IsAutoAdjust = false;
         public int TargetTriangleCount = 70000;
-        public List<OverallNdmfMeshSimplifierTarget> Targets = new();
+        public List<OverallNDMFMeshSimplifierTarget> Targets = new();
     }
     
     [Serializable]
-    public struct OverallNdmfMeshSimplifierTarget : IEquatable<OverallNdmfMeshSimplifierTarget>
+    public struct OverallNDMFMeshSimplifierTarget : IEquatable<OverallNDMFMeshSimplifierTarget>
     {
         public Renderer Renderer;
         public OverallNdmfMeshSimplifierTargetState State;
@@ -33,7 +33,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
 
         public MeshSimplifierOptions Options;
         
-        public static bool TryGet(Renderer renderer, out OverallNdmfMeshSimplifierTarget target)
+        public static bool TryGet(Renderer renderer, out OverallNDMFMeshSimplifierTarget target)
         {
             target = default;
 
@@ -98,7 +98,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
             return simplifiedMesh;
         }
 
-        public bool Equals(OverallNdmfMeshSimplifierTarget other)
+        public bool Equals(OverallNDMFMeshSimplifierTarget other)
         {
             return State == other.State &&
                    Renderer.Equals(other.Renderer) &&
@@ -111,7 +111,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
 
         public override bool Equals(object obj)
         {
-            return obj is OverallNdmfMeshSimplifierTarget other && Equals(other);
+            return obj is OverallNDMFMeshSimplifierTarget other && Equals(other);
         }
 
         public override int GetHashCode()
