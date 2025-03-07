@@ -87,11 +87,11 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
 
         public bool Enabled() => State == OverallNdmfMeshSimplifierTargetState.Enabled;
     
-        public Mesh Process()
+        public Mesh Process(Mesh originalMesh = null)
         {
-            var mesh = Utils.GetMesh(Renderer);
+            originalMesh ??= Utils.GetMesh(Renderer);
 
-            if (AbsoulteTriangleCount >= mesh.triangles.Length / 3) return UnityEngine.Object.Instantiate(mesh);
+            if (AbsoulteTriangleCount >= originalMesh.triangles.Length / 3) return UnityEngine.Object.Instantiate(originalMesh);
 
             var simplifiedMesh = new Mesh();
             var target = new MeshSimplificationTarget()
@@ -99,15 +99,15 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
                 Kind = MeshSimplificationTargetKind.AbsoluteVertexCount,
                 Value = AbsoulteTriangleCount
             };
-            MeshSimplifier.Simplify(mesh, target, Options, simplifiedMesh);
+            MeshSimplifier.Simplify(originalMesh, target, Options, simplifiedMesh);
             return simplifiedMesh;
         }
 
-        public async Task<Mesh> ProcessAsync(CancellationToken cancellationToken = default)
+        public async Task<Mesh> ProcessAsync(Mesh originalMesh = null, CancellationToken cancellationToken = default)
         {
-            var mesh = Utils.GetMesh(Renderer);
+            originalMesh ??= Utils.GetMesh(Renderer);
 
-            if (AbsoulteTriangleCount >= mesh.triangles.Length / 3) return UnityEngine.Object.Instantiate(mesh);
+            if (AbsoulteTriangleCount >= originalMesh.triangles.Length / 3) return UnityEngine.Object.Instantiate(originalMesh);
 
             var simplifiedMesh = new Mesh();
             var target = new MeshSimplificationTarget()
@@ -115,7 +115,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
                 Kind = MeshSimplificationTargetKind.AbsoluteVertexCount,
                 Value = AbsoulteTriangleCount
             };
-            await MeshSimplifier.SimplifyAsync(mesh, target, Options, simplifiedMesh, cancellationToken);
+            await MeshSimplifier.SimplifyAsync(originalMesh, target, Options, simplifiedMesh, cancellationToken);
             return simplifiedMesh;
         }
 

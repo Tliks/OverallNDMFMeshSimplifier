@@ -62,7 +62,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
             
             CancellationTokenSource cts = new();
             context.InvokeOnInvalidate(cts, cts => cts.Cancel());
-            var simplifiedMesh = await target.ProcessAsync();
+            var simplifiedMesh = await target.ProcessAsync(mesh);
 
             return new OverallNDMFMeshSimplifierPreviewNode(simplifiedMesh);
         }
