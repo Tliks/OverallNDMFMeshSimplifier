@@ -34,17 +34,15 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
             var groups = new List<RenderGroup>();
             foreach (var component in context.GetComponentsByType<OverallNdmfMeshSimplifier>())
             {
+                context.Observe(component, c => c.Targets.Count());
                 for (int i = 0; i < component.Targets.Count(); i++)
                 {
                     var index = i;
-                    var enabled = context.Observe(component, c => c.Targets[index].State == OverallNdmfMeshSimplifierTargetState.Enabled);
+                    var enabled = context.Observe(component, c => c.Targets[index].IsValid() && c.Targets[index].Enabled());
                     if (!enabled) continue;
 
                     var renderer = component.Targets[i].Renderer;
-                    if (renderer != null && Utils.GetMesh(renderer) != null)
-                    {
-                        groups.Add(RenderGroup.For(renderer).WithData<(OverallNdmfMeshSimplifier, int)>((component, i)));
-                    }
+                    groups.Add(RenderGroup.For(renderer).WithData<(OverallNdmfMeshSimplifier, int)>((component, i)));
                 }
             }
             return groups.ToImmutableList();
@@ -64,7 +62,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
             
             CancellationTokenSource cts = new();
             context.InvokeOnInvalidate(cts, cts => cts.Cancel());
-            var simplifiedMesh = await Processor.SimplifyAbsoluteTriangleCountAsync(mesh, target.AbsoulteTriangleCount, target.Options, cts.Token);
+            var simplifiedMesh = await target.ProcessAsync();
 
             return new OverallNdmfMeshSimplifierPreviewNode(simplifiedMesh);
         }

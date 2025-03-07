@@ -24,11 +24,9 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
                 {
                     foreach (var target in component.Targets)
                     {
-                        if (target.IsValid())
+                        if (target.IsValid() && target.Enabled())
                         {
-                            var mesh = Utils.GetMesh(target.Renderer);
-                            if (mesh == null) continue;
-                            var modifiedMesh = Processor.SimplifyAbsoluteTriangleCount(mesh, target.AbsoulteTriangleCount, target.Options);
+                            var modifiedMesh = target.Process();
                             Utils.AssignMesh(target.Renderer, modifiedMesh);
                         }
                     }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace com.aoyon.OverallNDMFMeshSimplifiers
 {
-    internal class Utils
+    public class Utils
     {
         public static Mesh GetMesh(Renderer renderer)
         {
@@ -17,7 +17,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
                     return null;
             }
         } 
-    
+        
         public static void AssignMesh(Renderer renderer, Mesh mesh)
         {
             switch (renderer)

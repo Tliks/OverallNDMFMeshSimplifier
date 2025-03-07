@@ -27,26 +27,21 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
 
         private void AssginTarget()
         {
-            var allRenderers = _component.GetComponentsInChildren<Renderer>(true)
-                .Where(r => r is MeshRenderer or SkinnedMeshRenderer)
-                .Where(r => Utils.GetMesh(r) != null && Utils.GetMesh(r).triangles.Length > 0);
-            
             var configuredRenderers = _component.Targets
                 .Select(t => t.Renderer)
-                .Where(r => r != null);
+                .ToHashSet();
 
-            var newRenderers = allRenderers.Except(configuredRenderers);
-
+            var newRenderers = _component.GetComponentsInChildren<Renderer>(true)
+                .Where(r => !configuredRenderers.Contains(r));
+            
             Undo.RecordObject(_component, "AssginTarget");
             foreach (var newRenderer in newRenderers)
             {
-                var state = OverallNdmfMeshSimplifierTargetState.Enabled;
-                if (Utils.IsEditorOnlyInHierarchy(newRenderer.gameObject))
-                {
-                    state = OverallNdmfMeshSimplifierTargetState.EditorOnly;
-                }
-                var mesh = Utils.GetMesh(newRenderer);
-                _component.Targets.Add(new OverallNdmfMeshSimplifierTarget(newRenderer, state, mesh.triangles.Length / 3));
+                if (!OverallNdmfMeshSimplifierTarget.TryGet(newRenderer, out var target)) continue;
+
+                if (Utils.IsEditorOnlyInHierarchy(newRenderer.gameObject)) target.State = OverallNdmfMeshSimplifierTargetState.EditorOnly;
+
+                _component.Targets.Add(target);
             }
         }
 
