@@ -129,7 +129,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
             }
 
             SortTargets(enabledTargets);
-            var labelWidth2 = Width(enabledTargets.First()) + 14f;
+            var labelWidth2 = enabledTargets.Any() ? Width(enabledTargets.First()) + 14f : 0f;
             for (int i = 0; i < enabledTargets.Count; i++)
             {
                 var enabledTarget = enabledTargets[i];
@@ -174,9 +174,10 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
             {
                 SortTargets(disabledTargets);
                 SortTargets(editorOnlyTargets);
+                var width1 = disabledTargets.Any() ? Width(disabledTargets.First()) : 0f;
+                var width2 = disabledTargets.Any() ? Width(disabledTargets.First()) : 0f;
+                var labelWidth3 = Mathf.Max(width1, width2) * 2 + 21f;
                 var otherTargets = disabledTargets.Concat(editorOnlyTargets);
-                var labelWidth3 = Mathf.Max(Width(enabledTargets.First()), Width(editorOnlyTargets.First())) * 2 + 21f;
-
                 foreach (var otherTarget in otherTargets)
                 {
                     var state = otherTarget.FindPropertyRelative(nameof(OverallNdmfMeshSimplifierTarget.State));
