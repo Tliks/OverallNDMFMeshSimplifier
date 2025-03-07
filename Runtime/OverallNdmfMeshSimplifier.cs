@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using nadena.dev.ndmf.runtime;
 using Meshia.MeshSimplification;
 
 namespace com.aoyon.OverallNDMFMeshSimplifier
@@ -17,6 +19,25 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
         public bool IsAutoAdjust = false;
         public int TargetTriangleCount = 70000;
         public List<OverallNDMFMeshSimplifierTarget> Targets = new();
+
+        public void AssginTarget()
+        {
+            var root = RuntimeUtil.FindAvatarInParents(transform);
+            if (root == null) root = transform;
+
+            var configuredRenderers = Targets.Select(t => t.Renderer).ToHashSet();
+            var newRenderers = root.GetComponentsInChildren<Renderer>(true)
+                .Where(r => !configuredRenderers.Contains(r));
+
+            foreach (var newRenderer in newRenderers)
+            {
+                if (!OverallNDMFMeshSimplifierTarget.TryGet(newRenderer, out var target)) continue;
+
+                if (Utils.IsEditorOnlyInHierarchy(newRenderer.gameObject)) target.State = OverallNdmfMeshSimplifierTargetState.EditorOnly;
+
+                Targets.Add(target);
+            }
+        }
     }
     
     [Serializable]

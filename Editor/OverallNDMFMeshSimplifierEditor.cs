@@ -27,22 +27,8 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
 
         private void AssginTarget()
         {
-            var configuredRenderers = _component.Targets
-                .Select(t => t.Renderer)
-                .ToHashSet();
-
-            var newRenderers = _component.GetComponentsInChildren<Renderer>(true)
-                .Where(r => !configuredRenderers.Contains(r));
-            
             Undo.RecordObject(_component, "AssginTarget");
-            foreach (var newRenderer in newRenderers)
-            {
-                if (!OverallNDMFMeshSimplifierTarget.TryGet(newRenderer, out var target)) continue;
-
-                if (Utils.IsEditorOnlyInHierarchy(newRenderer.gameObject)) target.State = OverallNdmfMeshSimplifierTargetState.EditorOnly;
-
-                _component.Targets.Add(target);
-            }
+            _component.AssginTarget();
         }
 
         public override void OnInspectorGUI()
