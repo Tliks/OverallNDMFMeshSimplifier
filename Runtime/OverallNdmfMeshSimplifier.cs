@@ -96,7 +96,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
             var simplifiedMesh = new Mesh();
             var target = new MeshSimplificationTarget()
             {
-                Kind = MeshSimplificationTargetKind.AbsoluteVertexCount,
+                Kind = MeshSimplificationTargetKind.AbsoluteTriangleCount,
                 Value = AbsoulteTriangleCount
             };
             MeshSimplifier.Simplify(originalMesh, target, Options, simplifiedMesh);
@@ -112,7 +112,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
             var simplifiedMesh = new Mesh();
             var target = new MeshSimplificationTarget()
             {
-                Kind = MeshSimplificationTargetKind.AbsoluteVertexCount,
+                Kind = MeshSimplificationTargetKind.AbsoluteTriangleCount,
                 Value = AbsoulteTriangleCount
             };
             await MeshSimplifier.SimplifyAsync(originalMesh, target, Options, simplifiedMesh, cancellationToken);
