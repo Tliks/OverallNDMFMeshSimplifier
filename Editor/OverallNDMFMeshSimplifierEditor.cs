@@ -175,7 +175,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
                 SortTargets(disabledTargets);
                 SortTargets(editorOnlyTargets);
                 var width1 = disabledTargets.Any() ? Width(disabledTargets.First()) : 0f;
-                var width2 = disabledTargets.Any() ? Width(disabledTargets.First()) : 0f;
+                var width2 = editorOnlyTargets.Any() ? Width(editorOnlyTargets.First()) : 0f;
                 var labelWidth3 = Mathf.Max(width1, width2) * 2 + 21f;
                 var otherTargets = disabledTargets.Concat(editorOnlyTargets);
                 foreach (var otherTarget in otherTargets)
