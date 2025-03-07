@@ -34,12 +34,14 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
             var groups = new List<RenderGroup>();
             foreach (var component in context.GetComponentsByType<OverallNdmfMeshSimplifier>())
             {
+                var componentEnabled = context.Observe(component.gameObject, g => g.activeInHierarchy);
+                if (!componentEnabled) continue;
                 context.Observe(component, c => c.Targets.Count());
                 for (int i = 0; i < component.Targets.Count(); i++)
                 {
                     var index = i;
-                    var enabled = context.Observe(component, c => c.Targets[index].IsValid() && c.Targets[index].Enabled());
-                    if (!enabled) continue;
+                    var targetEnabled = context.Observe(component, c => c.Targets[index].IsValid() && c.Targets[index].Enabled());
+                    if (!targetEnabled) continue;
 
                     var renderer = component.Targets[i].Renderer;
                     groups.Add(RenderGroup.For(renderer).WithData<(OverallNdmfMeshSimplifier, int)>((component, i)));

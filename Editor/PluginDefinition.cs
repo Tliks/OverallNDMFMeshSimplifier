@@ -22,12 +22,15 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
             {
                 foreach (var component in ctx.AvatarRootObject.GetComponentsInChildren<OverallNdmfMeshSimplifier>(true))
                 {
-                    foreach (var target in component.Targets)
+                    if (component.gameObject.activeInHierarchy)
                     {
-                        if (target.IsValid() && target.Enabled())
+                        foreach (var target in component.Targets)
                         {
-                            var modifiedMesh = target.Process();
-                            Utils.AssignMesh(target.Renderer, modifiedMesh);
+                            if (target.IsValid() && target.Enabled())
+                            {
+                                var modifiedMesh = target.Process();
+                                Utils.AssignMesh(target.Renderer, modifiedMesh);
+                            }
                         }
                     }
                     Object.DestroyImmediate(component, true);
