@@ -5,5 +5,5 @@ Overall NDMF Mesh Simplifier
 Simplify meshes in bulk and non-destructively for Unity.
 
 ## Dependencies
-- [NDMF](https://github.com/bdunderscore/ndmf)
-- [Meshia Mesh Simplification](https://github.com/RamType0/Meshia.MeshSimplification)
+- [NDMF](https://github.com/bdunderscore/ndmf) >= 1.5.0
+- [Meshia Mesh Simplification](https://github.com/RamType0/Meshia.MeshSimplification) => 2.1.0
