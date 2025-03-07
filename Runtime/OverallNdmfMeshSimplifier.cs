@@ -38,7 +38,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
             target = default;
 
             if (renderer == null) return false;
-            if (renderer is not SkinnedMeshRenderer or MeshRenderer) return false;
+            if (renderer is not SkinnedMeshRenderer and not MeshRenderer) return false;
             var mesh = Utils.GetMesh(renderer);
             if (mesh == null) return false;
             if (mesh.triangles.Length < 0) return false;
@@ -56,7 +56,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifiers
         public bool IsValid()
         {
             if (Renderer == null) return false;
-            if (Renderer is not SkinnedMeshRenderer or MeshRenderer) return false;
+            if (Renderer is not SkinnedMeshRenderer and not MeshRenderer) return false;
             var mesh = Utils.GetMesh(Renderer);
             if (mesh == null) return false;
             if (mesh.triangles.Length < 0) return false;
