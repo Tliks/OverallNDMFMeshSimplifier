@@ -15,9 +15,10 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
         protected override void Configure()
         {
             var sequence =
-                InPhase(BuildPhase.Transforming);
+                InPhase(BuildPhase.Optimizing);
 
             sequence
+            .AfterPlugin("com.anatawa12.avatar-optimizer")
             .Run("OverallNDMFMeshSimplifier", ctx => 
             {
                 foreach (var component in ctx.AvatarRootObject.GetComponentsInChildren<OverallNdmfMeshSimplifier>(true))
@@ -28,14 +29,15 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
                         {
                             if (target.IsValid() && target.Enabled())
                             {
-                                var modifiedMesh = target.Process();
+                                var modifiedMesh = new Mesh();
+                                target.Process(modifiedMesh);
                                 Utils.AssignMesh(target.Renderer, modifiedMesh);
                             }
                         }
                     }
                     Object.DestroyImmediate(component, true);
                 }
-            }).PreviewingWith(OverallNDMFMeshSimplifierPreview.Instance);
+            }).PreviewingWith(new OverallNDMFMeshSimplifierPreview());
         }
     }
 }

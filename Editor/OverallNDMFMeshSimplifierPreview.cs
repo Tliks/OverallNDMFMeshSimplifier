@@ -50,7 +50,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
             return groups.ToImmutableList();
         }
 
-        public async Task<IRenderFilterNode> Instantiate(RenderGroup group, IEnumerable<(Renderer, Renderer)> proxyPairs, ComputeContext context)
+        public Task<IRenderFilterNode> Instantiate(RenderGroup group, IEnumerable<(Renderer, Renderer)> proxyPairs, ComputeContext context)
         {
             var data = group.GetData<(OverallNdmfMeshSimplifier, int)>();
             var component = data.Item1;
@@ -62,11 +62,10 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
 
             var target = context.Observe(component, c => c.Targets[index], (a, b) => a.Equals(b));
             
-            CancellationTokenSource cts = new();
-            context.InvokeOnInvalidate(cts, cts => cts.Cancel());
-            var simplifiedMesh = await target.ProcessAsync(mesh);
+            var simplifiedMesh = new Mesh();
+            target.Process(simplifiedMesh, mesh); // デバックで一時的に変更。この場合はAAOの操作でフリーズするし、asyncの場合はフリーズはしないけどプレビューが効かなくなる。
 
-            return new OverallNDMFMeshSimplifierPreviewNode(simplifiedMesh);
+            return Task.FromResult<IRenderFilterNode>(new OverallNDMFMeshSimplifierPreviewNode(simplifiedMesh));
         }
     }
 

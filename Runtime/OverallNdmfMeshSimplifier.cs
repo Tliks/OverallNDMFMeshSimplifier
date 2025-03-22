@@ -87,36 +87,28 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
 
         public bool Enabled() => State == OverallNdmfMeshSimplifierTargetState.Enabled;
     
-        public Mesh Process(Mesh originalMesh = null)
+        public void Process(Mesh dst, Mesh src = null)
         {
-            originalMesh ??= Utils.GetMesh(Renderer);
+            src ??= Utils.GetMesh(Renderer);
 
-            if (AbsoulteTriangleCount >= originalMesh.triangles.Length / 3) return UnityEngine.Object.Instantiate(originalMesh);
-
-            var simplifiedMesh = new Mesh();
             var target = new MeshSimplificationTarget()
             {
                 Kind = MeshSimplificationTargetKind.AbsoluteTriangleCount,
                 Value = AbsoulteTriangleCount
             };
-            MeshSimplifier.Simplify(originalMesh, target, Options, simplifiedMesh);
-            return simplifiedMesh;
+            MeshSimplifier.Simplify(src, target, Options, dst);  
         }
 
-        public async Task<Mesh> ProcessAsync(Mesh originalMesh = null, CancellationToken cancellationToken = default)
+        public async Task ProcessAsync(Mesh dst, Mesh src = null, CancellationToken cancellationToken = default)
         {
-            originalMesh ??= Utils.GetMesh(Renderer);
+            src ??= Utils.GetMesh(Renderer);
 
-            if (AbsoulteTriangleCount >= originalMesh.triangles.Length / 3) return UnityEngine.Object.Instantiate(originalMesh);
-
-            var simplifiedMesh = new Mesh();
             var target = new MeshSimplificationTarget()
             {
                 Kind = MeshSimplificationTargetKind.AbsoluteTriangleCount,
                 Value = AbsoulteTriangleCount
             };
-            await MeshSimplifier.SimplifyAsync(originalMesh, target, Options, simplifiedMesh, cancellationToken);
-            return simplifiedMesh;
+            await MeshSimplifier.SimplifyAsync(src, target, Options, dst, cancellationToken);
         }
 
         public bool Equals(OverallNDMFMeshSimplifierTarget other)
