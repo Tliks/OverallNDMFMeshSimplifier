@@ -109,13 +109,13 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
                 if (GUILayout.Button("Set 50%", GUILayout.Width(90f))) { SetQualityAll(0.5f); }
                 if (GUILayout.Button("Set 100%", GUILayout.Width(90f))) { SetQualityAll(1.0f); }
                 var iconContent = EditorGUIUtility.IconContent("AssemblyLock");
-                iconContent.tooltip = "Lock prevents auto adjust to change value";
+                iconContent.tooltip = "Lock value";
                 EditorGUILayout.LabelField(iconContent, GUILayout.Width(18f));
                 EditorGUILayout.LabelField(GUIContent.none, GUILayout.Width(18f));
             }
 
             SortTargets(enabledTargets);
-            var labelWidth2 = enabledTargets.Any() ? Width(enabledTargets.First()) + 14f : 0f;
+            var labelWidth2 = enabledTargets.Any() ? IntWidth(enabledTargets.First()) + 14f : 0f;
             for (int i = 0; i < enabledTargets.Count; i++)
             {
                 var enabledTarget = enabledTargets[i];
@@ -160,8 +160,8 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
             {
                 SortTargets(disabledTargets);
                 SortTargets(editorOnlyTargets);
-                var width1 = disabledTargets.Any() ? Width(disabledTargets.First()) : 0f;
-                var width2 = editorOnlyTargets.Any() ? Width(editorOnlyTargets.First()) : 0f;
+                var width1 = disabledTargets.Any() ? IntWidth(disabledTargets.First()) : 0f;
+                var width2 = editorOnlyTargets.Any() ? IntWidth(editorOnlyTargets.First()) : 0f;
                 var labelWidth3 = Mathf.Max(width1, width2) * 2 + 21f;
                 var otherTargets = disabledTargets.Concat(editorOnlyTargets);
                 foreach (var otherTarget in otherTargets)
@@ -199,7 +199,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
                 var renderer = _currentSimplifySettingTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.Renderer));
                 var options = _currentSimplifySettingTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.Options));
                 
-                _showCurrentSimplifySetting = EditorGUILayout.Foldout(_showCurrentSimplifySetting, $"Simplify Options for {renderer?.objectReferenceValue?.name}");
+                _showCurrentSimplifySetting = EditorGUILayout.Foldout(_showCurrentSimplifySetting, $"Simplifier Options for {renderer?.objectReferenceValue?.name}");
                 if (_showCurrentSimplifySetting)
                 {
                     var iterator = options;
@@ -211,7 +211,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
                 }
             }
 
-            static float Width(SerializedProperty prop) => 7f * prop.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount)).intValue.ToString().Count();
+            static float IntWidth(SerializedProperty prop) => 7f * GetTotalTriangleCount(prop).ToString().Count();
         }
 
         private void TogglePreviewGUI(TogglablePreviewNode toggleNode)

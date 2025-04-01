@@ -31,10 +31,10 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
 
             foreach (var newRenderer in newRenderers)
             {
-                if (!OverallNDMFMeshSimplifierTarget.TryGet(newRenderer, out var target)) continue;
+                if (!OverallNDMFMeshSimplifierTarget.IsValidForTarget(newRenderer)) continue;
 
+                var target = new OverallNDMFMeshSimplifierTarget(newRenderer);
                 if (Utils.IsEditorOnlyInHierarchy(newRenderer.gameObject)) target.State = OverallNdmfMeshSimplifierTargetState.EditorOnly;
-
                 Targets.Add(target);
             }
         }
@@ -53,38 +53,30 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
         public bool Fixed; // AutoAdjustの対象から除外
 
         public MeshSimplifierOptions Options;
-        
-        public static bool TryGet(Renderer renderer, out OverallNDMFMeshSimplifierTarget target)
-        {
-            target = default;
 
+        public static bool IsValidForTarget(Renderer renderer)
+        {
             if (renderer == null) return false;
             if (renderer is not SkinnedMeshRenderer and not MeshRenderer) return false;
             var mesh = Utils.GetMesh(renderer);
             if (mesh == null) return false;
             if (mesh.triangles.Length < 0) return false;
 
-            target = new();
-            target.Renderer = renderer;
-            target.State = OverallNdmfMeshSimplifierTargetState.Enabled;
-            target.AbsoulteTriangleCount = mesh.triangles.Length / 3;
-            target.TotalTriangleCount = mesh.triangles.Length / 3;
-            target.Fixed = false;
-            target.Options = MeshSimplifierOptions.Default;
             return true;
         }
-
-        public bool IsValid()
+        
+        public OverallNDMFMeshSimplifierTarget(Renderer renderer)
         {
-            if (Renderer == null) return false;
-            if (Renderer is not SkinnedMeshRenderer and not MeshRenderer) return false;
-            var mesh = Utils.GetMesh(Renderer);
-            if (mesh == null) return false;
-            if (mesh.triangles.Length < 0) return false;
-
-            return true;
+            Renderer = renderer;
+            State = OverallNdmfMeshSimplifierTargetState.Enabled;
+            var count = Utils.GetMesh(renderer).triangles.Length / 3;
+            AbsoulteTriangleCount = count;
+            TotalTriangleCount = count;
+            Fixed = false;
+            Options = MeshSimplifierOptions.Default;
         }
 
+        public bool IsValid() => IsValidForTarget(Renderer);
         public bool Enabled() => State == OverallNdmfMeshSimplifierTargetState.Enabled;
     
         public Mesh Process(Mesh originalMesh = null)
