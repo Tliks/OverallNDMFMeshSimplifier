@@ -14,10 +14,9 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
 
         protected override void Configure()
         {
-            var sequence =
-                InPhase(BuildPhase.Transforming);
-
-            sequence
+            InPhase(BuildPhase.Optimizing)
+            .AfterPlugin("net.rs64.tex-trans-tool")
+            .AfterPlugin("com.anatawa12.avatar-optimizer")
             .Run("OverallNDMFMeshSimplifier", ctx => 
             {
                 foreach (var component in ctx.AvatarRootObject.GetComponentsInChildren<OverallNdmfMeshSimplifier>(true))
@@ -35,7 +34,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
                     }
                     Object.DestroyImmediate(component, true);
                 }
-            }).PreviewingWith(OverallNDMFMeshSimplifierPreview.Instance);
+            }).PreviewingWith(new OverallNDMFMeshSimplifierPreview());
         }
     }
 }

@@ -98,7 +98,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
             using (new EditorGUILayout.HorizontalScope())
             {
                 var current = enabledTargets.Sum(t => t.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.AbsoulteTriangleCount)).intValue)
-                    + disabledTargets.Sum(t => t.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount)).intValue);
+                    + disabledTargets.Sum(t => GetTotalTriangleCount(t));
                 var sum = enabledTargets.Concat(disabledTargets).Sum(t => t.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount)).intValue);
                 var countLabel = $"Current: {current} / {sum}";
                 var labelWidth1 = 7f * countLabel.ToString().Count();
@@ -122,7 +122,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
                 var state = enabledTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.State));
                 var renderer = enabledTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.Renderer));
                 var absoulteValue = enabledTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.AbsoulteTriangleCount));
-                var totalTriangleCount = enabledTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount));
+                var totalTriangleCount = GetTotalTriangleCount(enabledTarget);
                 var fixedValue = enabledTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.Fixed));
 
                 using (new EditorGUILayout.HorizontalScope())
@@ -130,12 +130,12 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
                     EditorGUI.BeginChangeCheck();
                     EditorGUILayout.PropertyField(state, GUIContent.none, GUILayout.Width(70f));
                     EditorGUILayout.ObjectField(renderer.objectReferenceValue, typeof(Renderer), false, GUILayout.MinWidth(120f)); // ReadOnly
-                    EditorGUILayout.IntSlider(absoulteValue, 0, totalTriangleCount.intValue, GUIContent.none);
+                    EditorGUILayout.IntSlider(absoulteValue, 0, totalTriangleCount, GUIContent.none);
                     if (EditorGUI.EndChangeCheck() && _isAutoAdjust.boolValue)
                     {
                         AdjustQuality(enabledTarget);
                     }
-                    EditorGUILayout.LabelField(new GUIContent($"/ {totalTriangleCount.intValue}"), GUILayout.Width(labelWidth2));
+                    EditorGUILayout.LabelField(new GUIContent($"/ {totalTriangleCount}"), GUILayout.Width(labelWidth2));
                     EditorGUILayout.PropertyField(fixedValue, GUIContent.none, GUILayout.Width(18f));
                     if (GUILayout.Button(EditorGUIUtility.IconContent("Settings@2x"), GUIStyleHelper.iconButtonStyle, GUILayout.Width(16f), GUILayout.Height(16f))) 
                     { 
@@ -168,7 +168,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
                 {
                     var state = otherTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.State));
                     var renderer = otherTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.Renderer));
-                    var totalTriangleCount = otherTarget.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount));
+                    var totalTriangleCount = GetTotalTriangleCount(otherTarget);
 
                     var IsEditorOnly = state.intValue == (int)OverallNdmfMeshSimplifierTargetState.EditorOnly;
                     var suspicious = IsEditorOnly && !Utils.IsEditorOnlyInHierarchy((renderer.objectReferenceValue as Renderer).gameObject);
@@ -185,8 +185,8 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
                         }
                         EditorGUILayout.ObjectField(renderer.objectReferenceValue, typeof(Renderer), false); // ReadOnly
                         var countLabel = IsEditorOnly 
-                            ? $"0 / {totalTriangleCount.intValue}"
-                            : $"{totalTriangleCount.intValue} / {totalTriangleCount.intValue}";
+                            ? $"0 / {totalTriangleCount}"
+                            : $"{totalTriangleCount} / {totalTriangleCount}";
                         EditorGUILayout.LabelField(new GUIContent(countLabel), GUILayout.Width(labelWidth3));
                     }
                     GUI.backgroundColor = defaultBackgroundColor;
@@ -258,6 +258,21 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
                 }
             }
             return (enabledTargets, disabledTargets, editorOnlyTargets);
+        }
+
+        private static int GetTotalTriangleCount(SerializedProperty targetProp)
+        {
+            var renderer = targetProp.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.Renderer)).objectReferenceValue as Renderer;
+            if (renderer == null) return 0;
+
+            if (OverallNDMFMeshSimplifierPreview.TryGetTotalTriangleCount(renderer, out var triCount))
+            {
+                return triCount;
+            }
+            else
+            {
+                return targetProp.FindPropertyRelative(nameof(OverallNDMFMeshSimplifierTarget.TotalTriangleCount)).intValue;
+            }
         }
 
         private void SortTargets(List<SerializedProperty> targets)
@@ -383,11 +398,11 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
         {
             get
             {
-                if (m_foldOutYellowStyle == null) InitFoldOutredStyle();
+                if (m_foldOutYellowStyle == null) InitFoldOutYellowStyle();
                 return m_foldOutYellowStyle;
             }
         }
-        static void InitFoldOutredStyle()
+        static void InitFoldOutYellowStyle()
         {
             m_foldOutYellowStyle = new GUIStyle(EditorStyles.foldout);
             m_foldOutYellowStyle.normal.textColor = Color.yellow;

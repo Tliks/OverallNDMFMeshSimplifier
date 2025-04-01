@@ -11,7 +11,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
 {
     internal class OverallNDMFMeshSimplifierPreview : IRenderFilter
     {
-        public static OverallNDMFMeshSimplifierPreview Instance => new();
+        private static readonly Dictionary<Renderer, int> _totalTriangleCountForRenderer = new();
 
         public static TogglablePreviewNode ToggleNode = TogglablePreviewNode.Create(
             () => "OverallNDMFMeshSimplifier",
@@ -36,8 +36,9 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
             {
                 var componentEnabled = context.Observe(component.gameObject, g => g.activeInHierarchy);
                 if (!componentEnabled) continue;
-                context.Observe(component, c => c.Targets.Count());
-                for (int i = 0; i < component.Targets.Count(); i++)
+                
+                var targetCount = context.Observe(component, c => c.Targets.Count());
+                for (int i = 0; i < targetCount; i++)
                 {
                     var index = i;
                     var targetEnabled = context.Observe(component, c => c.Targets[index].IsValid() && c.Targets[index].Enabled());
@@ -56,9 +57,12 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
             var component = data.Item1;
             var index = data.Item2;
 
+            var original = proxyPairs.First().Item1;
             var proxy = proxyPairs.First().Item2;
             var mesh = Utils.GetMesh(proxy);
             if (mesh == null) return null;
+
+            _totalTriangleCountForRenderer[original] = mesh.triangles.Count() / 3;
 
             var target = context.Observe(component, c => c.Targets[index], (a, b) => a.Equals(b));
             
@@ -67,6 +71,12 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
             var simplifiedMesh = await target.ProcessAsync(mesh);
 
             return new OverallNDMFMeshSimplifierPreviewNode(simplifiedMesh);
+        }
+
+        public static bool TryGetTotalTriangleCount(Renderer renderer, out int triCount)
+        {
+            triCount = 0;
+            return NDMFPreview.DisablePreviewDepth == 0 && ToggleNode.IsEnabled.Value && _totalTriangleCountForRenderer.TryGetValue(renderer, out triCount);
         }
     }
 
