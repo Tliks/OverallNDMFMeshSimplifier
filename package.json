@@ -1,7 +1,7 @@
 {
   "name": "com.aoyon.overall-ndmf-mesh-simplifier",
   "displayName": "Overall NDMF Mesh Simplifier",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "unity": "2022.3",
   "description": "Simplify meshes in bulk and non-destructively for Unity.",
   "author": {

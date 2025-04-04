@@ -13,6 +13,10 @@
 
 ### Security
 
+## [0.1.1] - 2024-04-04
+### Fixed
+- Handling width in UI
+
 ## [0.1.0] - 2024-04-04
 ### Added
 - initial release
