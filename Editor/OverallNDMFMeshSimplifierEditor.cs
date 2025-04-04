@@ -129,8 +129,8 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
                 {
                     EditorGUI.BeginChangeCheck();
                     EditorGUILayout.PropertyField(state, GUIContent.none, GUILayout.Width(70f));
-                    EditorGUILayout.ObjectField(renderer.objectReferenceValue, typeof(Renderer), false, GUILayout.MinWidth(120f)); // ReadOnly
-                    EditorGUILayout.IntSlider(absoulteValue, 0, totalTriangleCount, GUIContent.none);
+                    EditorGUILayout.ObjectField(renderer.objectReferenceValue, typeof(Renderer), false, GUILayout.MinWidth(100f)); // ReadOnly
+                    EditorGUILayout.IntSlider(absoulteValue, 0, totalTriangleCount, GUIContent.none, GUILayout.MinWidth(140f));
                     if (EditorGUI.EndChangeCheck() && _isAutoAdjust.boolValue)
                     {
                         AdjustQuality(enabledTarget);
