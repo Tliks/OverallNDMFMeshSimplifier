@@ -16,7 +16,7 @@ namespace com.aoyon.OverallNDMFMeshSimplifier
         {
             InPhase(BuildPhase.Optimizing)
             .AfterPlugin("net.rs64.tex-trans-tool")
-            .AfterPlugin("com.anatawa12.avatar-optimizer")
+            .BeforePlugin("com.anatawa12.avatar-optimizer")
             .Run("OverallNDMFMeshSimplifier", ctx => 
             {
                 foreach (var component in ctx.AvatarRootObject.GetComponentsInChildren<OverallNdmfMeshSimplifier>(true))
